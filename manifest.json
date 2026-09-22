@@ -1,12 +1,14 @@
 {
   "manifest_version": 3,
   "name": "Context Stack",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Captura URLs de navegación, antepone https://r.jina.ai/ para convertirlas a Markdown limpio y acumula contexto en Context Stack para LLMs.",
   "permissions": [
     "storage",
     "tabs",
-    "activeTab"
+    "activeTab",
+    "contextMenus",
+    "scripting"
   ],
   "action": {
     "default_popup": "popup.html",
