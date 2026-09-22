@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bgGradient" x1="0" y1="0" x2="128" y2="128" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1E293B"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+    <linearGradient id="iconGradient" x1="20" y1="20" x2="108" y2="108" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#6366F1"/>
+      <stop offset="50%" stop-color="#818CF8"/>
+      <stop offset="100%" stop-color="#C084FC"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+  
+  <!-- Base Background Box -->
+  <rect x="8" y="8" width="112" height="112" rx="28" fill="url(#bgGradient)" stroke="#334155" stroke-width="4"/>
+  
+  <!-- Outer Glow Layer -->
+  <rect x="12" y="12" width="104" height="104" rx="24" fill="none" stroke="url(#iconGradient)" stroke-width="2" opacity="0.4"/>
+  
+  <!-- Jina Lightning / Document Context Icon -->
+  <path d="M72 16L24 72H60L52 112L104 56H68L72 16Z" 
+        fill="url(#iconGradient)" 
+        stroke="#FFFFFF" 
+        stroke-width="3" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"
+        filter="url(#glow)"/>
+</svg>
