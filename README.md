@@ -2,6 +2,8 @@
 
 > Extensión de Google Chrome (**Manifest V3**) para capturar URLs de navegación, convertirlas automáticamente a Markdown limpio mediante **Jina AI** (`https://r.jina.ai/`) y acumular un bloc de notas editable para armar contexto rápido listo para LLMs (ChatGPT, Claude, Gemini, DeepSeek, etc.).
 
+[![Invitame un café en cafecito.app](https://cdn.cafecito.app/imgs/buttons/button_1.svg)](https://cafecito.app/rgabrieldiaz)
+
 ---
 
 ## ✨ Características Principales
@@ -39,6 +41,14 @@
 4. Haz clic en el botón **"Cargar descomprimida"** (*Load unpacked*).
 5. Selecciona la carpeta del repositorio local `ContextStack`.
 6. ¡Listo! Te recomendamos **fijar la extensión** en la barra de herramientas de Chrome usando el ícono de rompecabezas 🧩.
+
+---
+
+## ☕ Apoyar el Proyecto
+
+Si esta extensión te resulta útil en tu día a día con modelos de lenguaje, ¡puedes invitarme un café!
+
+[![Invitame un café en cafecito.app](https://cdn.cafecito.app/imgs/buttons/button_1.svg)](https://cafecito.app/rgabrieldiaz)
 
 ---
 

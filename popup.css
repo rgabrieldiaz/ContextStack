@@ -413,6 +413,30 @@ body {
   height: 14px;
 }
 
+.settings-support {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--card-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.support-text {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.cafecito-btn img {
+  border-radius: var(--radius-sm);
+  transition: transform 0.15s ease;
+}
+
+.cafecito-btn:hover img {
+  transform: scale(1.04);
+}
+
 /* Tools Bar & LLM Dropdown */
 .tools-bar {
   display: flex;
