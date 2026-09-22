@@ -25,7 +25,15 @@
           <span class="shortcut-hint" title="Atajo de teclado global">Alt+S</span>
         </div>
       </div>
-      <div class="item-badge" id="itemCountBadge">0 URLs</div>
+      <div class="header-right">
+        <button id="toggleItemsBtn" class="icon-btn" title="Ver lista de ítems / eliminar individuales">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+        </button>
+        <button id="toggleSettingsBtn" class="icon-btn" title="Opciones de Jina AI y deduplicación">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        </button>
+        <div class="item-badge" id="itemCountBadge">0 URLs</div>
+      </div>
     </header>
 
     <!-- Quick Action Buttons -->
@@ -42,7 +50,7 @@
 
     <!-- Format Selector -->
     <section class="format-section">
-      <label for="formatSelect" class="format-label">Formato de Salida:</label>
+      <label for="formatSelect" class="format-label">Formato:</label>
       <div class="select-wrapper">
         <select id="formatSelect" class="format-select">
           <option value="markdown">📝 Markdown Links ([Título](URL))</option>
@@ -53,12 +61,66 @@
       </div>
     </section>
 
-    <!-- Notepad Area -->
-    <section class="notepad-section">
+    <!-- Main View: Notepad -->
+    <section class="notepad-section" id="notepadView">
       <textarea id="notepad" class="notepad-textarea" spellcheck="false" placeholder="Las URLs capturadas con Jina AI (https://r.jina.ai/) aparecerán aquí...&#10;&#10;Sugerencia: Presiona Alt+S (o Command+Shift+S en Mac) en cualquier pestaña para capturarla en segundo plano."></textarea>
       <div class="notepad-status">
         <span id="statsText">0 caracteres | 0 líneas</span>
         <span class="sync-indicator" id="syncIndicator">Sincronizado ✓</span>
+      </div>
+    </section>
+
+    <!-- Items List View (Hidden by default) -->
+    <section class="items-view hidden" id="itemsView">
+      <div class="view-header">
+        <h3>Lista de URLs Capturadas</h3>
+        <button id="closeItemsViewBtn" class="btn-text">Volver al Notepad</button>
+      </div>
+      <div class="items-list" id="itemsList">
+        <!-- Rendered items list -->
+      </div>
+    </section>
+
+    <!-- Settings View (Hidden by default) -->
+    <section class="settings-view hidden" id="settingsView">
+      <div class="view-header">
+        <h3>Opciones de Jina AI & Filtros</h3>
+        <button id="closeSettingsViewBtn" class="btn-text">Guardar y Volver</button>
+      </div>
+      <div class="settings-content">
+        <label class="setting-row">
+          <input type="checkbox" id="deduplicateCheck">
+          <span>Omitir URLs duplicadas automáticamente</span>
+        </label>
+        <label class="setting-row">
+          <input type="checkbox" id="jinaNoImagesCheck">
+          <span>Jina: Omitir imágenes (ahorra tokens)</span>
+        </label>
+        <label class="setting-row">
+          <input type="checkbox" id="jinaLinksSummaryCheck">
+          <span>Jina: Incluir resumen de enlaces al final</span>
+        </label>
+      </div>
+    </section>
+
+    <!-- Tools Secondary Bar -->
+    <section class="tools-bar">
+      <button id="downloadMdBtn" class="btn btn-tool" title="Descargar como archivo .md">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        <span>Descargar .md</span>
+      </button>
+
+      <div class="llm-dropdown-wrapper">
+        <button id="openLlmBtn" class="btn btn-tool btn-llm" title="Copiar y abrir en tu LLM preferido">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          <span>Abrir en LLM ▾</span>
+        </button>
+        <div class="llm-menu hidden" id="llmMenu">
+          <button data-url="https://chatgpt.com" class="llm-menu-item">🤖 ChatGPT</button>
+          <button data-url="https://claude.ai" class="llm-menu-item">🔮 Claude</button>
+          <button data-url="https://gemini.google.com" class="llm-menu-item">✨ Gemini</button>
+          <button data-url="https://chat.deepseek.com" class="llm-menu-item">🐋 DeepSeek</button>
+        </div>
       </div>
     </section>
 
