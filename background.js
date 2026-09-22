@@ -63,6 +63,52 @@ async function updateBadge(count) {
 }
 
 /**
+ * Inyecta una notificación toast sutil en la pestaña activa al usar atajos o menú contextual
+ */
+async function showToastNotification(tabId, message) {
+  if (!tabId) return;
+  try {
+    await chrome.scripting.executeScript({
+      target: { tabId: tabId },
+      func: (msg) => {
+        const toastId = 'context-stack-toast-notification';
+        const oldToast = document.getElementById(toastId);
+        if (oldToast) oldToast.remove();
+
+        const toast = document.createElement('div');
+        toast.id = toastId;
+        toast.innerHTML = `⚡ <b>Context Stack:</b> ${msg}`;
+        toast.style.position = 'fixed';
+        toast.style.top = '16px';
+        toast.style.right = '16px';
+        toast.style.zIndex = '999999999';
+        toast.style.backgroundColor = '#0F172A';
+        toast.style.color = '#F8FAFC';
+        toast.style.border = '1px solid #6366F1';
+        toast.style.borderRadius = '8px';
+        toast.style.padding = '10px 16px';
+        toast.style.fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+        toast.style.fontSize = '13px';
+        toast.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.5)';
+        toast.style.pointerEvents = 'none';
+        toast.style.transition = 'all 0.3s ease';
+
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateY(-10px)';
+          setTimeout(() => toast.remove(), 300);
+        }, 2200);
+      },
+      args: [message]
+    });
+  } catch (e) {
+    // Ignorar si la página es restringida como chrome://
+  }
+}
+
+/**
  * Agrega una o varias pestañas al almacenamiento local.
  */
 async function addTabs(tabs) {
@@ -70,7 +116,7 @@ async function addTabs(tabs) {
   let items = data.items || [];
   const selectedFormat = data.selectedFormat || 'markdown';
   const jinaOptions = data.jinaOptions || {};
-  const deduplicate = data.deduplicate !== false; // Por defecto true
+  const deduplicate = data.deduplicate !== false;
   
   const newItems = [];
   const tabsToAdd = Array.isArray(tabs) ? tabs : [tabs];
@@ -80,7 +126,6 @@ async function addTabs(tabs) {
     const jinaUrl = toJinaUrl(tab.url, jinaOptions);
     if (!jinaUrl) continue;
 
-    // Deduplicación por URL original si está activada
     if (deduplicate && items.some(item => item.originalUrl === tab.url)) {
       continue;
     }
@@ -148,15 +193,18 @@ function setupContextMenus() {
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   try {
     if (info.menuItemId === 'add-page-to-stack' && tab) {
-      await addTabs(tab);
+      const items = await addTabs(tab);
+      await showToastNotification(tab.id, `Página guardada (${items.length} URLs)`);
     } else if (info.menuItemId === 'add-link-to-stack' && info.linkUrl) {
       const linkTab = {
         url: info.linkUrl,
         title: info.linkText || info.linkUrl
       };
-      await addTabs(linkTab);
+      const items = await addTabs(linkTab);
+      if (tab) await showToastNotification(tab.id, `Enlace guardado (${items.length} URLs)`);
     } else if (info.menuItemId === 'add-selection-to-stack' && info.selectionText) {
       await addSelectionAsNote(info.selectionText, tab);
+      if (tab) await showToastNotification(tab.id, `Nota de texto guardada ✓`);
     }
   } catch (err) {
     console.error('Error en menú contextual:', err);
@@ -169,7 +217,8 @@ chrome.commands.onCommand.addListener(async (command) => {
     try {
       const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
       if (activeTab) {
-        await addTabs(activeTab);
+        const items = await addTabs(activeTab);
+        await showToastNotification(activeTab.id, `Pestaña guardada (${items.length} URLs)`);
       }
     } catch (err) {
       console.error('Error al capturar pestaña con atajo:', err);

@@ -8,14 +8,20 @@
 
 - ** Proxy Jina AI Automático:** Convierte de forma transparente cualquier URL a su versión limpia en Markdown anteponiendo `https://r.jina.ai/`.
 - **⌨️ Atajo de Teclado Ergonómico (`Alt+S`):** Captura la pestaña activa en segundo plano con una sola mano (`Alt+S` en Windows/Linux o `Command+Shift+S` en Mac) sin necesidad de abrir el popup.
-- **📑 Captura en Lote:** Botón para recopilar todas las pestañas abiertas en la ventana actual con un solo clic.
-- **🎨 Selector de Formatos de Salida:**
-  1. **Markdown Links:** `[Título de la página](https://r.jina.ai/https://ejemplo.com)`
-  2. **Solo URLs:** `https://r.jina.ai/https://ejemplo.com`
-  3. **Prompt LLM Listo:** Bloque con encabezado de instrucción (*"Analiza la siguiente documentación estructurada en Markdown:"*) listo para copiar y pegar.
-- **📝 Bloc de Notas Editable Sincronizado:** Permite agregar o modificar notas manualmente en tiempo real. Se sincroniza bidireccionalmente con `chrome.storage.local` para no perder ediciones.
-- **🔢 Badge Contador Dinámico:** Muestra el número de páginas capturadas en el ícono de la extensión en la barra de herramientas.
-- **🌙 Diseño Oscuro Moderno:** Interfaz compacta (~380px x 500px) inspirada en Dark Mode con paleta Slate/Indigo y animaciones fluidas.
+- **🖱️ Menú Contextual (Click Derecho):**
+  - Haz click derecho en **cualquier enlace** para agregarlo a la pila sin abrirlo.
+  - Haz click derecho en **cualquier texto seleccionado** para añadirlo como cita/nota.
+  - Haz click derecho en el fondo de **cualquier página** para capturarla.
+- **🔔 Notificación Toast Sutil:** Feedback flotante en pantalla (*"⚡ Context Stack: Guardado"*) al usar el atajo de teclado o el menú contextual.
+- **📥 Exportación & Accesos Rápidos a LLMs:**
+  - **Descargar `.md`:** Exporta tu colección directamente como un archivo `.md` (ej. `context-stack-2026-09-22.md`).
+  - **Abrir en LLM:** Copia automáticamente tu contexto y abre **ChatGPT**, **Claude**, **Gemini** o **DeepSeek** en una nueva pestaña.
+- **📋 Inspector & Eliminación Individual:** Vista detallada de URLs capturadas con opción para borrar ítems individualmente (❌).
+- **⚙️ Opciones de Jina AI & Deduplicación:**
+  - Omitir URLs duplicadas automáticamente.
+  - Omitir imágenes (`no-image=true`) para reducir drásticamente el consumo de tokens en tu LLM.
+  - Generar resumen de enlaces al final de la conversión.
+- **🌙 Diseño Oscuro Moderno:** Interfaz compacta (~380px x 520px) inspirada en Dark Mode con paleta Slate/Indigo y animaciones fluidas.
 
 ---
 
@@ -51,11 +57,11 @@
 
 ```text
 ContextStack/
-├── manifest.json         # Configuración Manifest V3 y permisos
-├── background.js        # Service worker en segundo plano y escuchador de atajos
-├── popup.html           # Estructura de la interfaz del popup flotante
-├── popup.css            # Estilos CSS oscuros y diseño responsivo
-├── popup.js             # Lógica del popup y sincronización en tiempo real
+├── manifest.json         # Configuración Manifest V3, permisos y contextMenus
+├── background.js        # Service worker, listeners, menú contextual y toast
+├── popup.html           # Interfaz HTML del popup con inspector y herramientas LLM
+├── popup.css            # Estilos CSS oscuros y menú desplegable
+├── popup.js             # Lógica interactiva, exportación .md y ajustes
 ├── icons/               # Logotipos e íconos en PNG (16px, 48px, 128px) y SVG
 │   ├── icon.svg
 │   ├── icon16.png
@@ -69,15 +75,6 @@ ContextStack/
 
 ---
 
-## 🛠️ Desarrollo y Tecnologías
-
-- **Google Chrome Extensions API (Manifest V3)**
-- **JavaScript (ES6+)**
-- **HTML5 & CSS3 Pure Flexbox**
-- **Jina AI Reader Proxy (`https://r.jina.ai/`)**
-
----
-
 ## 📄 Licencia
 
-Este proyecto está bajo la Licencia MIT. Consulta el archivo de código para más detalles.
+Este proyecto está bajo la Licencia MIT.
